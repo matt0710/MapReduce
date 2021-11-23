@@ -9,14 +9,17 @@ import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class AvgAgeMapper extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
+public class AvgAgeMapper extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
 
     boolean check = true;
+    String regex = "[0-9]+";
+    Pattern p = Pattern.compile(regex);
 
     @Override
-    public void map(LongWritable longWritable, Text value, OutputCollector<Text, Text> outputCollector, Reporter reporter) throws IOException {
-
+    public void map(LongWritable longWritable, Text value, OutputCollector<Text, IntWritable> outputCollector, Reporter reporter) throws IOException {
 
         String[] row = value.toString().split(";");
 
@@ -25,13 +28,10 @@ public class AvgAgeMapper extends MapReduceBase implements Mapper<LongWritable, 
             return;
         }
 
-        if (row[7].equals("Participant Nationality") && row[14].equals("Participant Age")) {
-            outputCollector.collect(new Text(row[7]), new Text(row[14]));
-            return;
-        }
+        Matcher m = p.matcher(row[14]);
 
-        outputCollector.collect(new Text(row[7]), new Text(row[14]));
+        if (!m.matches()) return;
 
-
+        outputCollector.collect(new Text(row[7]), new IntWritable(Integer.parseInt(row[14])));
     }
 }

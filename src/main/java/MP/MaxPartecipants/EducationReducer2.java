@@ -34,8 +34,14 @@ public class EducationReducer2 extends Reducer<Text, IntWritable, Text, IntWrita
 
         List<Map.Entry<Integer, String>> entryList = new ArrayList<>(map.entrySet());
 
-        for (int i = 0; i < 5; i++) {
-            context.write(new Text(entryList.get(i).getValue()), new IntWritable(entryList.get(i).getKey()));
+        if (entryList.size() < 5) {
+            for (int i = 0; i < entryList.size(); i++) {
+                context.write(new Text(entryList.get(i).getValue()), new IntWritable(entryList.get(i).getKey()));
+            }
+        } else {
+            for (int i = 0; i < 5; i++) {
+                context.write(new Text(entryList.get(i).getValue()), new IntWritable(entryList.get(i).getKey()));
+            }
         }
 
     }

@@ -10,23 +10,18 @@ import org.apache.hadoop.mapred.Reporter;
 import java.io.IOException;
 import java.util.*;
 
-public class AvgAgeReducer extends MapReduceBase implements Reducer<Text, Text, Text, Text>{
+public class AvgAgeReducer extends MapReduceBase implements Reducer<Text, IntWritable, Text, IntWritable>{
 
     @Override
-    public void reduce(Text text, Iterator<Text> iterator, OutputCollector<Text, Text> outputCollector, Reporter reporter) throws IOException {
+    public void reduce(Text text, Iterator<IntWritable> iterator, OutputCollector<Text, IntWritable> outputCollector, Reporter reporter) throws IOException {
 
         int size = 0;
         LinkedList<Integer> list = new LinkedList<>();
         int outcome = 0;
 
-       /* if (text.toString().equals("Participant Nationality")) {
-            outputCollector.collect(text, new Text("Avg of partecipants"));
-            return;
-        }*/
-
 
         while (iterator.hasNext()) {
-            list.add(iterator.next().toString().equals("-") ? 0 : Integer.parseInt(iterator.next().toString()));
+            list.add(iterator.next().get());
             size++;
         }
 
@@ -34,7 +29,7 @@ public class AvgAgeReducer extends MapReduceBase implements Reducer<Text, Text, 
             outcome += list.get(i);
         }
 
-        outputCollector.collect(text, new Text(String.valueOf(outcome/size)));
+        outputCollector.collect(text, new IntWritable(outcome/size));
 
     }
 }

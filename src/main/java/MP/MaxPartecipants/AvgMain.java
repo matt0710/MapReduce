@@ -24,10 +24,10 @@ public class AvgMain {
         conf.setReducerClass(AvgAgeReducer.class);
 
         conf.setMapOutputKeyClass(Text.class);
-        conf.setMapOutputValueClass(Text.class);
+        conf.setMapOutputValueClass(IntWritable.class);
 
         conf.setOutputKeyClass(Text.class);
-        conf.setOutputValueClass(Text.class);
+        conf.setOutputValueClass(IntWritable.class);
 
         JobClient.runJob(conf);
 

@@ -33,7 +33,7 @@ public class MaxPartecipantsReducer2 extends MapReduceBase implements Reducer<Te
 
         while (iterator.hasNext()) {
             row = iterator.next().toString().split(";");
-            map.put(row[0], row[1].equals("-") ? new IntWritable(0) : new IntWritable(Integer.parseInt(row[1]))); //i'm putting in the map receiving_organization as key and num_part as values
+            map.put(row[0], new IntWritable(Integer.parseInt(row[1]))); //i'm putting in the map receiving_organization as key and num_part as values
         }
 
         IntWritable maxValueInMap = Collections.max(map.values());
