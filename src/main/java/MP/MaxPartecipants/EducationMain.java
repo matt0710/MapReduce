@@ -8,9 +8,12 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import java.util.Date;
+
 public class EducationMain {
 
     public static void main(String[] args) throws Exception {
+        long start = new Date().getTime();
 
         if (args.length != 2) {
             System.err.println("Usage: WordCount <InPath> <OutPath>");
@@ -30,6 +33,12 @@ public class EducationMain {
 
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+        job.waitForCompletion(true);
+
+        long end = new Date().getTime();
+
+        System.out.println("Time required is: " + (end-start));
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
